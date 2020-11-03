@@ -12,11 +12,8 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 std::string shaderFilePath = "../src/Basic.shader";
 
-int main(void)
+void ShaderJoyInit()
 {
-	int running = 0;
-	SDL_Event event;
-	static float getTime;
 	SDL_Init(SDL_INIT_VIDEO);
 	window = SDL_CreateWindow("OpenGL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
@@ -24,7 +21,7 @@ int main(void)
 	if(glcontext == NULL)
 	{
 		std::cerr << "Error: can't create sdl context.\n";
-		return -1;
+		exit(-1);
 	}
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	SDL_GL_SetSwapInterval(1);
@@ -33,11 +30,22 @@ int main(void)
 	if(glew != GLEW_OK)
 	{
 		std::cerr << "Error: can't init glew library.\n";
-		return -1;
+		exit(-1);
 	}
+}
+
+int main(void)
+{
+	int running = 0;
+	SDL_Event event;
+	static float getTime;
+	
+	/* Init all libs */
+	ShaderJoyInit();
 
 	int glProg = glCreateProgram();
 	
+	/* Work with shaders */
 	ShaderHandler shaderObj(shaderFilePath, glProg);
 	shaderObj.ShaderExec(GL_VERTEX_SHADER);
 	shaderObj.ShaderExec(GL_FRAGMENT_SHADER);
@@ -52,6 +60,7 @@ int main(void)
 		return -1;
 	}
 
+	/* Main loop */
 	while(running != 1)
 	{
 		while(SDL_PollEvent(&event))
