@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11)
 project(shaderjoy)
 
 # Some compiler stuff
-set(SRC_LIST main.cpp)
+set(SRC_LIST src/main.cpp src/shaderhandler.cpp src/shaderhandler.hpp)
 set(CMAKE_C_COMPILER clang)
 set(CMAKE_CXX_COMPILER clang++)
 set(CMAKE_BUILD_TYPE Debug)
