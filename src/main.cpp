@@ -24,7 +24,7 @@ void ShaderJoyInit()
 		exit(-1);
 	}
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	SDL_GL_SetSwapInterval(1);
+	SDL_GL_SetSwapInterval(0);
 	
 	GLuint glew = glewInit();
 	if(glew != GLEW_OK)
@@ -39,6 +39,8 @@ int main(void)
 	int running = 0;
 	SDL_Event event;
 	static float getTime;
+	static float lastTime;
+	static int frames = 0;
 	
 	/* Init all libs */
 	ShaderJoyInit();
@@ -60,6 +62,7 @@ int main(void)
 		return -1;
 	}
 
+	lastTime = SDL_GetTicks();
 	/* Main loop */
 	while(running != 1)
 	{
@@ -83,6 +86,17 @@ int main(void)
 		getTime = SDL_GetTicks();
 		glUniform1f(uniformTime, getTime * 0.0025 + 1);
 		glRectf(-getTime, -getTime, getTime, getTime);
+		
+		/* Fps counter */
+		frames++;
+		if (getTime - lastTime >= 5000.0)
+		{
+			std::cout << "Frames per 5 second: " << frames << "frames/sec\n";
+			std::cout << "Frame time: " << 5000.0 / static_cast<float>(frames) << "ms/frame\n";
+			frames = 0;
+			lastTime += 5000.0;
+		}
+		
 		glFlush();
 		SDL_GL_SwapWindow(window);
 	}
