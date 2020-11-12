@@ -61,7 +61,14 @@ int main(void)
 		printf("Error in glGetUniformLocation");
 		return -1;
 	}
-
+	
+	GLint uniformResolution = glGetUniformLocation(glProg, "iResolution");
+	if((GLuint)uniformTime == 0xFFFFFFFF || uniformTime == -1)
+	{
+		printf("Error in glGetUniformLocation");
+		return -1;
+	}
+	
 	lastTime = SDL_GetTicks();
 	/* Main loop */
 	while(running != 1)
@@ -85,6 +92,7 @@ int main(void)
 		}
 		getTime = SDL_GetTicks();
 		glUniform1f(uniformTime, getTime * 0.0025 + 1);
+		glUniform2f(uniformResolution, W, H);
 		glRectf(-getTime, -getTime, getTime, getTime);
 		
 		/* Fps counter */
