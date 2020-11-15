@@ -38,7 +38,7 @@ float shortestDistanceToSurface(vec3 eye, vec3 marchingDirection, float start, f
 vec3 rayDirection(float fieldOfView, vec2 size, vec4 fragCoord) {
     vec2 xy = fragCoord.xy - size / 2.0;
     float z = size.y / tan(radians(fieldOfView) / 2.0);
-    return normalize(vec3(xy, -pos.z));
+    return normalize(vec3(xy, -z));
 }
 
 void main()
@@ -46,7 +46,7 @@ void main()
 	vec3 dir = rayDirection(45.0, iResolution, gl_FragCoord);
     vec3 eye = vec3(0.0, 0.0, 5.0);
     float dist = shortestDistanceToSurface(eye, dir, MIN_DIST, MAX_DIST);
-	vec3 color = 0.5 + 0.5 * cos(iTime + pos.yxy + vec3(1,2,4));
+	vec3 color = 0.5 + 0.5 * cos(iTime + dist + vec3(0.1,2,4));
     
     if (dist > MAX_DIST - EPSILON) {
         // Didn't hit anything
