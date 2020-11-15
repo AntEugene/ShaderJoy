@@ -2,3 +2,4 @@ build/
 ShaderJoy.kdev4
 TODO
 .kdev4/
+.vscode/

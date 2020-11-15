@@ -10,7 +10,7 @@
 
 SDL_Window *window;
 SDL_Renderer *renderer;
-std::string shaderFilePath = "../src/Basic.shader";
+std::string shaderFilePath = "../src/Basic.glsl";
 
 void ShaderJoyInit()
 {
@@ -58,15 +58,15 @@ int main(void)
 	GLint uniformTime = glGetUniformLocation(glProg, "iTime");
 	if((GLuint)uniformTime == 0xFFFFFFFF || uniformTime == -1)
 	{
-		printf("Error in glGetUniformLocation");
-		return -1;
+		std::cerr << "Error: glGetUniformLocation @" << __LINE__ << " in file - " << __FILE__ << std::endl;
+		//return -1;
 	}
 	
 	GLint uniformResolution = glGetUniformLocation(glProg, "iResolution");
 	if((GLuint)uniformTime == 0xFFFFFFFF || uniformTime == -1)
 	{
-		printf("Error in glGetUniformLocation");
-		return -1;
+		std::cerr << "Error: glGetUniformLocation @ line " << __LINE__ << " in file - " << __FILE__ << std::endl;
+		//return -1;
 	}
 	
 	lastTime = SDL_GetTicks();
@@ -108,6 +108,7 @@ int main(void)
 		glFlush();
 		SDL_GL_SwapWindow(window);
 	}
+	glDeleteProgram(glProg);
 	SDL_Quit();
 	return 0;
 }
