@@ -1,12 +1,13 @@
 #include <iostream>
 #include <string>
+#include "SDL_video.h"
 #include "shaderhandler.hpp"
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <SDL2/SDL.h>
 
-#define W 1280
-#define H 720
+#define WIDTH 1280
+#define HEIGHT 720
 
 SDL_Window *window;
 SDL_Renderer *renderer;
@@ -15,7 +16,12 @@ std::string shaderFilePath = "../src/Basic.glsl";
 void ShaderJoyInit()
 {
 	SDL_Init(SDL_INIT_VIDEO);
-	window = SDL_CreateWindow("OpenGL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+	window = SDL_CreateWindow("OpenGL",
+		SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED,
+		WIDTH,
+		HEIGHT,
+		SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
 	SDL_GLContext glcontext = SDL_GL_CreateContext(window);
 	if(glcontext == NULL)
@@ -58,15 +64,13 @@ int main(void)
 	GLint uniformTime = glGetUniformLocation(glProg, "iTime");
 	if((GLuint)uniformTime == 0xFFFFFFFF || uniformTime == -1)
 	{
-		std::cerr << "Error: glGetUniformLocation @" << __LINE__ << " in file - " << __FILE__ << std::endl;
-		//return -1;
+		std::cerr << "Error: glGetUniformLocation at line: " << __LINE__ << " in file: " << __FILE__ << std::endl;
 	}
 	
 	GLint uniformResolution = glGetUniformLocation(glProg, "iResolution");
 	if((GLuint)uniformTime == 0xFFFFFFFF || uniformTime == -1)
 	{
-		std::cerr << "Error: glGetUniformLocation @ line " << __LINE__ << " in file - " << __FILE__ << std::endl;
-		//return -1;
+		std::cerr << "Error: glGetUniformLocation at line: " << __LINE__ << " in file: " << __FILE__ << std::endl;
 	}
 	
 	lastTime = SDL_GetTicks();
@@ -92,14 +96,14 @@ int main(void)
 		}
 		getTime = SDL_GetTicks();
 		glUniform1f(uniformTime, getTime * 0.0025 + 1);
-		glUniform2f(uniformResolution, W, H);
+		glUniform2f(uniformResolution, WIDTH, HEIGHT);
 		glRectf(-getTime, -getTime, getTime, getTime);
 		
 		/* Fps counter */
 		frames++;
 		if (getTime - lastTime >= 5000.0)
 		{
-			std::cout << "Frames per 5 second: " << frames << "frames/sec\n";
+			std::cout << "Frames per 5 second: " << frames << " frames/sec\n";
 			std::cout << "Frame time: " << 5000.0 / static_cast<float>(frames) << "ms/frame\n";
 			frames = 0;
 			lastTime += 5000.0;
